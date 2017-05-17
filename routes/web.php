@@ -14,7 +14,6 @@
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => '.admin'], function() {
 	Route::resource('groups',		'GroupsController');
 	Route::resource('roles',		'RolesController');
-	Route::resource('permissions',	'PermissionsController');
 	Route::resource('services',		'ServicesController');
 	Route::resource('users',		'UsersController');
 
@@ -22,21 +21,23 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => '.admin'], fu
 	Route::post('settings',	'SettingsController@update');
 });
 
-Route::group(['prefix' => 'cas', 'as' => 'cas.'], function() {
-	Route::get('login',				'CasController@login')->name('login');
-	Route::post('login',			'CasController@postLogin');
-	Route::get('logout',			'CasController@logut')->name('logout');
+Route::group(['prefix' => 'cas', 'namespace' => 'Cas', 'as' => 'cas.'], function() {
+	Route::get('login',				'LoginController@login')->name('login');
+	Route::post('login',			'LoginController@postLogin');
+	Route::get('logout',			'LoginController@logut')->name('logout');
+
 	Route::get('validate',			'CasController@validate');
 	Route::get('serviceValidate',	'CasController@serviceValidate');
 	Route::get('proxyValidate',		'CasController@proxyValidate');
 	Route::get('proxy',				'CasController@proxy');
 
+	/* To be Implement
 	Route::group(['prefix' => 'p3', 'as' => 'p3'], function() {
 		Route::get('serviceValidate',	'CasP3Controller@serviceValidate');
 		Route::get('proxyValidate',		'CasP3Controller@proxyValidate');
-	});
+	});*/
 });
 
-Route::get('/', function() {
-	return redirect()->route('cas.login');
-});
+Route::get('login', 'HomeController@login')->name('login');
+Route::get('logout', 'HomeController@logout')->name('logout');
+Route::get('/', 'HomeController@index')->name('root');
